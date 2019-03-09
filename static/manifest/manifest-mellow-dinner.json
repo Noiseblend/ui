@@ -1,0 +1,56 @@
+{
+    "display": "fullscreen",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/mellow-dinner/mellow-dinner-android-1024x1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        }
+    ],
+    "name": "Mellow Dinner",
+    "short_name": "Mellow",
+    "description": "Laid-back soundtrack for an ideal night in the company of your closest friends",
+    "theme_color": "#862833",
+    "background_color": "#862833"
+}

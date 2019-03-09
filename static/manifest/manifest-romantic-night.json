@@ -1,0 +1,56 @@
+{
+    "display": "fullscreen",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/img/icons/romantic-night/romantic-night-android-1024x1024.png",
+            "sizes": "1024x1024",
+            "type": "image/png"
+        }
+    ],
+    "name": "Romantic Night",
+    "short_name": "Romantic",
+    "description": "Charming songs to accompany your candle-lit night",
+    "theme_color": "#FF293E",
+    "background_color": "#FF293E"
+}

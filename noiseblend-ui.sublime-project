@@ -1,0 +1,36 @@
+{
+	"build_systems":
+	[
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"python\" -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"now-ui-kit",
+				"node_modules",
+				".ropeproject",
+				".next",
+				"hooks/__pycache__",
+				"dist"
+			],
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"LSP":
+		{
+			"pyls":
+			{
+				"enabled": true
+			}
+		}
+	}
+}

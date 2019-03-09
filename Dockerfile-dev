@@ -1,0 +1,16 @@
+FROM node:alpine
+
+VOLUME /cache
+WORKDIR /app
+
+RUN yarn --cache-folder /cache
+RUN yarn --cache-folder /cache upgrade caniuse-lite browserslist
+
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_DSN
+ENV SENTRY_ORG=alin-panaitiu \
+    SENTRY_PROJECT=noiseblend \
+    SENTRY_RELEASE=dev \
+    SENTRY_DSN=${SENTRY_DSN}
+
+CMD ["yarn", "dev"]

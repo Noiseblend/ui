@@ -1,0 +1,15 @@
+arrowParens: always
+bracketSpacing: true
+jsxBracketSameLine: true
+semi: false
+parser: babel
+overrides:
+-   files: '*.coffee'
+    options:
+        parser: coffeescript
+        plugins:
+        - node_modules/prettier-plugin-coffeescript
+        singleQuote: false
+printWidth: 94
+singleQuote: true
+tabWidth: 4

@@ -1,0 +1,34 @@
+FROM node:alpine
+
+COPY . /app
+WORKDIR /app
+VOLUME /cache
+
+ARG SENTRY_ORG=alin-panaitiu
+ARG SENTRY_PROJECT=noiseblend
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_RELEASE
+ARG SENTRY_DSN
+ARG LOCAL_API_URL
+ARG REMOTE_API_URL
+ARG LOCAL_WS_URL
+ARG REMOTE_WS_URL
+ARG DOMAIN
+
+ENV SENTRY_ORG=${SENTRY_ORG} \
+    SENTRY_PROJECT=${SENTRY_PROJECT} \
+    SENTRY_RELEASE=${SENTRY_RELEASE} \
+    SENTRY_DSN=${SENTRY_DSN} \
+    LOCAL_API_URL=${LOCAL_API_URL} \
+    REMOTE_API_URL=${REMOTE_API_URL} \
+    LOCAL_WS_URL=${LOCAL_WS_URL} \
+    REMOTE_WS_URL=${REMOTE_WS_URL} \
+    DOMAIN=${DOMAIN}
+
+RUN yarn --cache-folder /cache
+RUN yarn --cache-folder /cache upgrade caniuse-lite browserslist
+RUN yarn build
+
+EXPOSE 3000
+
+CMD ["yarn", "start"]

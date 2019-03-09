@@ -1,0 +1,93 @@
+{
+    "scripts": {
+        "dev": "next",
+        "build": "NODE_ENV=production next build",
+        "start": "NODE_ENV=production next start"
+    },
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@babel/polyfill": "^7.2.5",
+        "@fortawesome/fontawesome-svg-core": "^1.2.15",
+        "@fortawesome/free-brands-svg-icons": "^5.7.2",
+        "@fortawesome/free-solid-svg-icons": "^5.7.2",
+        "@fortawesome/react-fontawesome": "^0.1.4",
+        "@manaflair/redux-batch": "^1.0.0",
+        "@sentry/browser": "^4.6.4",
+        "@sentry/node": "^4.6.4",
+        "add": "^2.0.6",
+        "animejs": "^3.0.1",
+        "apisauce": "^1.0.2",
+        "atob": "^2.1.2",
+        "color": "^3.1.0",
+        "create-react-class": "^15.6.3",
+        "extend": "^3.0.2",
+        "js-cookie": "^2.2.0",
+        "lodash": "^4.17.11",
+        "next": "^8.0.3",
+        "next-redux-wrapper": "^3.0.0-alpha.2",
+        "node-vibrant": "^3.2.0-alpha",
+        "prop-types": "^15.7.2",
+        "react": "^16.8.4",
+        "react-dom": "^16.8.4",
+        "react-draggable": "^3.2.1",
+        "react-feather": "^1.1.6",
+        "react-flip-move": "^3.0.3",
+        "react-infinite-scroller": "^1.2.4",
+        "react-redux": "^6.0.1",
+        "react-tippy": "^1.2.3",
+        "react-transition-group": "^2.6.0",
+        "redux": "^4.0.1",
+        "redux-saga": "^1.0.2",
+        "redux-undo": "^1.0.0-beta9-9-7",
+        "reduxsauce": "^1.0.1",
+        "seamless-immutable": "^7.1.4",
+        "uuid": "^3.3.2"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.3.4",
+        "@sentry/webpack-plugin": "^1.6.2",
+        "@weco/next-plugin-transpile-modules": "^2.2.0",
+        "@zeit/next-bundle-analyzer": "^0.1.2",
+        "babel-plugin-lodash": "^3.3.4",
+        "babel-plugin-ramda": "^2.0.0",
+        "babel-plugin-root-import": "^6.1.0",
+        "browserslist": "^4.4.2",
+        "caniuse-lite": "^1.0.30000943",
+        "coffee-loader": "^0.9.0",
+        "coffeescript": "^2.3.2",
+        "import-sort": "^6.0.0",
+        "import-sort-parser-babylon": "^6.0.0",
+        "import-sort-style-structured": "1.0.0",
+        "lodash-webpack-plugin": "^0.11.5",
+        "next-coffeescript": "1.3.0",
+        "styled-jsx-plugin-stylus-nib": "^1.0.2",
+        "stylus": "^0.54.5",
+        "svg-react-loader": "^0.4.6",
+        "url-loader": "^1.1.2",
+        "webpack-bundle-analyzer": "^3.1.0",
+        "webpack-sentry-plugin": "^1.16.0",
+        "worker-loader": "^2.0.0"
+    },
+    "importSort": {
+        ".coffee": {
+            "parser": "coffee",
+            "style": "eslint"
+        },
+        ".js, .jsx, .es6, .es": {
+            "parser": "babylon",
+            "style": "structured"
+        },
+        ".ts, .tsx": {
+            "parser": "typescript",
+            "style": "eslint"
+        }
+    },
+    "sideEffects": [
+        "*.svg",
+        "./lib/sets.coffee",
+        "./lib/util.coffee",
+        "./lib/str.coffee",
+        "./styles/fontawesome.coffee",
+        "./styles/colors.coffee"
+    ]
+}

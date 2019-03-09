@@ -1,0 +1,16 @@
+*.js
+*.map
+.next
+node_modules
+*.sublime-workspace
+!static/js/**/*.js
+.ropeproject
+!next.config.js
+!styled-jsx-plugin-stylus/**/*.js
+!lodash.js
+__pycache__
+*.pyc
+*.log
+static/stylus/test.*
+.python-version
+now.json

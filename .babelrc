@@ -1,0 +1,40 @@
+{
+    "presets": [
+        [
+            "next/babel",
+            {
+                "preset-env": {
+                    "targets": {
+                        "browsers": [">0.5%", "not ie 11", "not op_mini all"],
+                        "node": true
+                    }
+                },
+                "styled-jsx": {
+                    "vendorPrefixes": false,
+                    "plugins": [
+                        [
+                            "styled-jsx-plugin-stylus-nib",
+                            {
+                                "paths": ["./static"],
+                                "imports": ["stylus"]
+                            }
+                        ]
+                    ]
+                },
+                "transform-runtime": {
+                    "regenerator": true
+                }
+            }
+        ]
+    ],
+    "plugins": [
+        "lodash",
+        "babel-plugin-root-import",
+        [
+            "ramda",
+            {
+                "useES": true
+            }
+        ]
+    ]
+}
