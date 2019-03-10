@@ -45,8 +45,6 @@ class MyApp extends App
         @onRouteChangeError = null
 
         @loadingSetter = null
-        # @driftWatcher = null
-        # @driftWatcherTimeout = null
 
     @getInitialProps: ({ Component, router, ctx }) ->
         { store, query, res, req, ctx... } = ctx
@@ -118,7 +116,6 @@ class MyApp extends App
             UIActions.setMobile(window.innerWidth <= config.WIDTH.mobile)
             UIActions.setMediumScreen(window.innerWidth <= config.WIDTH.medium)
         ])
-        # @handleDriftWidget()
 
     componendDidCatch: (error, info) ->
         Sentry.configureScope((scope) ->
@@ -126,9 +123,6 @@ class MyApp extends App
         Sentry.captureException(error)
 
     componentWillUnmount: ->
-        # @stopDriftWatcher()
-        # @stopDriftWatcherTimeout()
-
         window.removeEventListener('resize', @detectMobileDeferred)
         Router.events.off("routeChangeComplete", @onRouteChangeComplete)
         Router.events.off("routeChangeStart", @onRouteChangeStart)
@@ -149,9 +143,6 @@ class MyApp extends App
         window.addEventListener('resize', @detectMobileDeferred)
 
         @addRouteEventListeners()
-        # @loadDrift()
-        # @loadHotjar()
-        # @loadTagManager()
 
         if @props.error
             @props.setErrorMessage(@props.error)
@@ -175,14 +166,6 @@ class MyApp extends App
             )
 
         @props.batchActions(actions)
-
-    handleDriftWidget: (pathname) ->
-        pathname ?= Router.pathname
-        if @props.blendParams? or
-        (pathname isnt '/' and window.innerWidth <= config.WIDTH.mobile)
-            drift?.api?.widget?.hide?()
-        else if not @props.blendParams?
-            drift?.api?.widget?.show?()
 
     addRouteEventListeners: ->
         @onRouteChangeError = (err, url) =>
@@ -208,8 +191,6 @@ class MyApp extends App
             if @loadingSetter?
                 clearTimeout(@loadingSetter)
 
-            # @handleDriftWidget(pathname)
-
         @onRouteChangeStart = (url) =>
             if Router.pathname is '/blend' and url isnt '/blend'
                 window.location.href = url
@@ -227,114 +208,6 @@ class MyApp extends App
         Router.events.on("routeChangeError", @onRouteChangeError)
         Router.events.on("routeChangeComplete", @onRouteChangeComplete)
         Router.events.on("routeChangeStart", @onRouteChangeStart)
-
-    loadTagManager: ->
-        window.l ?= []
-        window.l.push({
-            'gtm.start': new Date().getTime(),
-            event: 'gtm.js'
-        })
-        f = document.getElementsByTagName('script')[0]
-        j = document.createElement('script')
-        j.async = true
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-PJWKF7J'
-        f.parentNode.insertBefore(j, f)
-
-    loadHotjar: ->
-        window.hj ?= () ->
-            window.hj.q ?= []
-            window.hj.q.push(arguments)
-
-        window._hjSettings =
-            hjid: if config.PRODUCTION then 912982 else 913519
-            hjsv: 6
-
-        head = document.getElementsByTagName('head')[0]
-        scriptElement = document.createElement('script')
-        scriptElement.async = 1
-        scriptElement.src = "
-            https://static.hotjar.com/c/hotjar-\
-            #{ window._hjSettings.hjid }.js?\
-            sv=#{ window._hjSettings.hjsv }"
-        head.appendChild(scriptElement)
-
-    loadDrift: ->
-        @driftWatcher = setInterval(
-            (() =>
-                if not window.drift?
-                    return
-                @stopDriftWatcher()
-                @stopDriftWatcherTimeout()
-                @initDrift()
-            ), 100
-        )
-        @driftWatcherTimeout = setTimeout(
-            (() =>
-                @stopDriftWatcher()
-                @driftWatcherTimeout = null
-            ), 20000
-        )
-
-        t = window.driftt = window.drift = window.driftt or []
-        if not t.init
-            if t.invoked
-                console.error("Drift snippet included twice.")
-                return
-            t.invoked = true
-            t.methods = [
-                "identify", "config", "track", "reset",
-                "debug", "show", "ping", "page",
-                "hide", "off", "on",
-            ]
-            t.factory = (e) ->
-                return () ->
-                    n = Array.prototype.slice.call(arguments)
-                    n.unshift(e)
-                    t.push(n)
-                    return t
-            t.methods.forEach((e) -> t[e] = t.factory(e))
-            t.load = (t) ->
-                e = 3e5
-                n = Math.ceil(new Date() / e) * e
-                o = document.createElement("script")
-                o.type = "text/javascript"
-                o.async = true
-                o.crossorigin = "anonymous"
-                o.src = "https://js.driftt.com/include/#{ n }/#{ t }.js"
-                i = document.getElementsByTagName("script")[0]
-                i.parentNode.insertBefore(o, i)
-
-        drift.SNIPPET_VERSION = '0.3.1'
-        drift.load('n2mza8kkuvk6')
-
-
-    initDrift: ->
-        @hideMessage = () =>
-            if @props.authenticated
-                @props.setUserDetails(driftMessageHidden: true)
-            drift.off('welcomeMessage:close', @hideMessage)
-            drift.off('awayMessage:close', @hideMessage)
-
-        drift.on('ready', (api) =>
-            if @props.authenticated
-                @handleDriftWidget()
-                user = @props.user ? @props.fetched?.user
-                if user? and not user?.driftMessageHidden
-                    drift.on('welcomeMessage:close', @hideMessage)
-                    drift.on('awayMessage:close', @hideMessage)
-                    if not @props.blendParams?
-                        api.showWelcomeOrAwayMessage()
-        )
-
-    stopDriftWatcher: ->
-        if @driftWatcher?
-            clearInterval(@driftWatcher)
-            @driftWatcher = null
-
-    stopDriftWatcherTimeout: ->
-        if @driftWatcherTimeout?
-            clearTimeout(@driftWatcherTimeout)
-            @driftWatcherTimeout = null
 
     render: ->
         { Component, store, props... } = @props
