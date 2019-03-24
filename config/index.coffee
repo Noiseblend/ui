@@ -56,7 +56,7 @@ config =
         icon: "app"
         color: colors.YELLOW.hex()
         background: colors.BLACK.s()
-        manifest: "/manifest.json"
+        manifest: "/static/manifest/manifest.json"
         title: "Noiseblend"
         description: "One-tap music for every occasion, with Spotify"
         navbar:

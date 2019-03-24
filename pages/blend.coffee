@@ -28,7 +28,7 @@ initialProps = (blend) ->
     return
         icon: blend.dashedName
         color: blend.color
-        manifest: "/manifest-#{ blend.dashedName }.json"
+        manifest: "/static/manifest/manifest-#{ blend.dashedName }.json"
         title: blend.name
         description: blend.description
 
