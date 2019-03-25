@@ -12,7 +12,7 @@ import config from "~/config"
 
 color = (type) ->
     switch type
-        when "error" then colors.RED
+        when "error" then colors.RED.desaturate(0.1)
         when "warning" then colors.YELLOW
         when "info" then colors.BLUE
         when "success" then colors.WHITE
