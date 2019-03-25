@@ -2,6 +2,7 @@
 echo "$DOCKER_PASSWORD" | docker login -u alinpanaitiu --password-stdin
 
 docker push noiseblend/ui:$TRAVIS_COMMIT
+docker push noiseblend/ui:latest
 docker push noiseblend/ui:staging
 
 if [[ $TRAVIS_PULL_REQUEST == "false" && $TRAVIS_BRANCH != $TRAVIS_TAG ]]; then
@@ -13,7 +14,5 @@ fi
 
 if [[ $TRAVIS_TAG ]]; then
     docker tag noiseblend/ui:$TRAVIS_COMMIT noiseblend/ui:$TRAVIS_TAG
-    docker tag noiseblend/ui:$TRAVIS_COMMIT noiseblend/ui:latest
     docker push noiseblend/ui:$TRAVIS_TAG
-    docker push noiseblend/ui:latest
 fi

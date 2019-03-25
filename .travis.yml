@@ -14,6 +14,15 @@ matrix:
           --build-arg LOCAL_WS_URL=ws://api:9000
           --build-arg REMOTE_WS_URL=wss://api.noiseblend.com
           --build-arg DOMAIN=www.noiseblend.com .
+        - docker build -t noiseblend/ui:latest
+          --build-arg SENTRY_DSN
+          --build-arg SENTRY_AUTH_TOKEN
+          --build-arg SENTRY_RELEASE=$TRAVIS_COMMIT
+          --build-arg LOCAL_API_URL=http://api:9000/
+          --build-arg REMOTE_API_URL=https://api.noiseblend.com/
+          --build-arg LOCAL_WS_URL=ws://api:9000
+          --build-arg REMOTE_WS_URL=wss://api.noiseblend.com
+          --build-arg DOMAIN=www.noiseblend.com .
       script:
         - docker images
     - install:
