@@ -54,10 +54,6 @@ create = (ctx, baseURL) ->
         adapter
         timeout: 60000
     })
-    api.addMonitor((response) ->
-        request = response.originalError?.request
-        if response.status in [403, 401] and request?.path isnt "/logout"
-            redirect({target: "/?logout=true", res: ctx.res, isServer: ctx.isServer}))
 
     api.addRequestTransform((request) ->
         request.headers = {
