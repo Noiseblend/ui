@@ -28,8 +28,10 @@ getAuthToken = (ctx) ->
 getHeaders = (ctx) ->
     headers = Authorization: "Bearer #{ getAuthToken(ctx) }"
 
-    if ctx.blendToken?
+    if ctx?.blendToken?
         headers.BlendToken = "#{ ctx.blendToken }"
+
+    return headers
 
 
 create = (ctx, baseURL) ->
@@ -60,7 +62,7 @@ create = (ctx, baseURL) ->
     api.addRequestTransform((request) ->
         request.headers = {
             (request.headers ? {})...
-            getHeaders()...
+            getHeaders(ctx)...
         }
     )
 
