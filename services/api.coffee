@@ -25,7 +25,7 @@ getAuthToken = (ctx) ->
         setAuthTokenCookie(authToken, ctx)
         authToken
 
-getHeaders: (ctx) ->
+getHeaders = (ctx) ->
     headers = Authorization: "Bearer #{ getAuthToken(ctx) }"
 
     if ctx.blendToken?
