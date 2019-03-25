@@ -98,24 +98,20 @@ class Index extends React.Component
     componentDidUpdate: (prevProps, prevState, snapshot) ->
         { query } = Router
         if query?.logout is "true"
-            @props.setAuthenticated(false)
             removeAuthTokenCookie()
-            Router.replace("/", "/", shallow: true)
+            window.location.replace('/')
         else if query?.token?
             Router.replace("/", "/", shallow: true)
 
     componentDidMount: () ->
         { query } = Router
         if query?.logout is "true"
-            @props.setAuthenticated(false)
             removeAuthTokenCookie()
-            Router.replace("/", "/", shallow: true)
+            window.location.replace('/')
         else if query?.code? and query?.state?
             Router.replace("/", "/", shallow: true)
         else if query?.token?
             Router.replace("/", "/", shallow: true)
-        else
-            @props.setAuthenticated(@props.authenticated)
 
     render: () ->
         { authenticated, authenticating, emailConfirmed, actions... } = @props
