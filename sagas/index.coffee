@@ -1,7 +1,7 @@
 import { all, takeEvery, takeLatest } from 'redux-saga/effects'
 
 import { ArtistTypes } from '~/redux/artists'
-import AuthActions, { AuthTypes } from '~/redux/auth'
+import { AuthTypes } from '~/redux/auth'
 import { CacheTypes } from '~/redux/cache'
 import { CityTypes } from '~/redux/cities'
 import { CountryTypes } from '~/redux/countries'
@@ -22,7 +22,7 @@ import {
     searchArtists,
     setArtistTimeRange
 } from './artists'
-import { startAuthentication, watchAuthToken } from './auth'
+import { startAuthentication } from './auth'
 import { cache } from './cache'
 import {
     dislikeCity,
@@ -83,7 +83,6 @@ export default getRootSaga = (ctx) ->
             takeLatest(ArtistTypes.LIKE_ARTIST, likeArtist, api)
             takeLatest(ArtistTypes.SET_TIME_RANGE, setArtistTimeRange, api)
             takeLatest(ArtistTypes.SEARCH_ARTISTS, searchArtists, api)
-            takeLatest(AuthTypes.SET_AUTH_TOKEN, watchAuthToken)
             takeLatest(AuthTypes.START_AUTHENTICATION, startAuthentication, api)
             takeEvery(CacheTypes.CACHE, cache)
             takeLatest(CityTypes.DISLIKE_CITY, dislikeCity, api)

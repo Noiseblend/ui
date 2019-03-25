@@ -43,9 +43,6 @@ class Index extends React.Component
 
         if query.code? and query.state? and isServer
             user = await api.authenticate(query.code, query.state)
-            if user?
-                await setAuthTokenCookie(user.authToken, ctx)
-
             authenticated = user?
             props =
                 fetched: { user }
@@ -186,7 +183,5 @@ mapDispatchToProps = (dispatch) ->
     batchActions: (actions) -> dispatch(actions)
     startAuthentication: () ->
         dispatch(AuthActions.startAuthentication())
-    setAuthenticated: (authenticated) ->
-        dispatch(AuthActions.setAuthenticated(authenticated))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)

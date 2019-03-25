@@ -7,6 +7,8 @@ import PlaylistActions from '~/redux/playlists'
 import RecommendationActions, { RecommendationTypes } from '~/redux/recommendations'
 import SpotifyActions from '~/redux/spotify'
 
+import { getAuthTokenCookie } from '~/lib/session'
+
 import config from '~/config'
 
 
@@ -89,7 +91,7 @@ sendTuneableAttributes = (socket) ->
             yield call([socket, socket.send], JSON.stringify(data))
 
 export openPlaylistTunerWebsocket = () ->
-    token = yield select((state) -> state.auth.authToken)
+    token = getAuthTokenCookie()
     socket = new WebSocket("#{ config.WS_URL }/playlist-tuner?token=#{ token }")
     socketChannel = yield call(watchMessages, socket)
     yield put(RecommendationActions.setState(playlistTunerWebsocketOpen: true))

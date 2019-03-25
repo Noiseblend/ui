@@ -97,10 +97,9 @@ Navbar = ({
         """}</style>
     </nav>
 
-mapStateToProps = ({ ui, auth }) ->
+mapStateToProps = ({ ui }) ->
     mobile: ui.mobile
     navbarConfig: ui.navbar
-    authenticated: auth.authenticated
 
 mapDispatchToProps = (dispatch) -> {}
 

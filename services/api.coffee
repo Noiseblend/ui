@@ -10,38 +10,34 @@ import Sentry from "~/lib/sentry"
 import { getAuthTokenCookie, setAuthTokenCookie } from "~/lib/session"
 import { any } from "~/lib/util"
 
-import AuthActions from "~/redux/auth"
 import SpotifyActions from "~/redux/spotify"
 
 { serverRuntimeConfig, publicRuntimeConfig } = getConfig()
 
 UUID_PATTERN = new RegExp(/[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}/, "i")
 
-create = (ctx, baseURL) ->
-    { blendToken } = ctx
+getAuthToken = (ctx) ->
     cookieToken = getAuthTokenCookie(ctx)
     if UUID_PATTERN.test(cookieToken)
-        authToken = cookieToken
+        cookieToken
     else
         authToken = uuid4()
+        setAuthTokenCookie(authToken, ctx)
+        authToken
 
+getHeaders: (ctx) ->
+    headers = Authorization: "Bearer #{ getAuthToken(ctx) }"
+
+    if ctx.blendToken?
+        headers.BlendToken = "#{ ctx.blendToken }"
+
+
+create = (ctx, baseURL) ->
     baseURL =
         if ctx.isServer
             publicRuntimeConfig.localApiURL
         else
             publicRuntimeConfig.remoteApiURL
-
-    if ctx.store?
-        existingAuthToken = ctx.store.getState().auth.authToken
-        if existingAuthToken isnt authToken
-            ctx.store?.dispatch(AuthActions.setAuthToken(authToken))
-    setAuthTokenCookie(authToken, ctx)
-
-    config = { authToken, blendToken }
-    headers = Authorization: "Bearer #{ config.authToken }"
-
-    if config.blendToken?
-        headers.BlendToken = "#{ config.blendToken }"
 
     adapter =
         if not ctx.isServer
@@ -53,7 +49,6 @@ create = (ctx, baseURL) ->
 
     api = apisauce.create({
         baseURL
-        headers
         adapter
         timeout: 60000
     })
@@ -61,6 +56,14 @@ create = (ctx, baseURL) ->
         request = response.originalError?.request
         if response.status in [403, 401] and request?.path isnt "/logout"
             redirect({target: "/?logout=true", res: ctx.res, isServer: ctx.isServer}))
+
+    api.addRequestTransform((request) ->
+        request.headers = {
+            (request.headers ? {})...
+            getHeaders()...
+        }
+    )
+
     api.addResponseTransform((response) ->
         if not response.status? or response.status >= 400
             console.error(response.originalError)
@@ -82,22 +85,14 @@ create = (ctx, baseURL) ->
             if response.status isnt 404 and request?.path isnt "/blend"
                 ctx.store?.dispatch(SpotifyActions.setErrorMessage(response)))
 
-    getAuthToken = () -> config.authToken
-    getBlendToken = () -> config.blendToken
-
     oauthCode = () -> api.get("oauth-code")
     isAuthenticated = () -> api.get("is-authenticated")
     blendToken = (blend) -> api.get("blend-token", { blend })
     authorizationUrl = () -> api.get("authorization-url")
     authenticate = (code, state) ->
         api.get('authenticate', { code, state }).then((res) ->
-            if res.ok
-                config.authToken = res.data.authToken
-                authHeader = "Bearer #{ config.authToken }"
-                if config.authToken? and api.headers["Authorization"] isnt authHeader
-                    api.setHeader("Authorization", authHeader)
-                    ctx.store?.dispatch(AuthActions.setAuthToken(config.authToken))
-                    setAuthTokenCookie(config.authToken, ctx)
+            if res.ok and res.data?.authToken?
+                setAuthTokenCookie(res.data.authToken, ctx)
                 return res.data
             return null)
 
@@ -367,8 +362,6 @@ create = (ctx, baseURL) ->
         clientToken
         blend
         blendToken
-        getAuthToken
-        getBlendToken
         oauthCode
         setHeader: api.setHeader
     }

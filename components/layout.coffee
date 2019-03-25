@@ -73,7 +73,7 @@ Layout = (props) ->
                 background: #{ background }
         """}</style>
         { props.children }
-        <Navbar />
+        <Navbar authenticated={ props.authenticated } />
         <BackButton
             id='app-back-button'
             color={ colors.WHITE }

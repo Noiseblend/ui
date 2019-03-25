@@ -2,6 +2,7 @@ import { eventChannel } from 'redux-saga'
 import { all, call, put, race, select, take, takeLatest } from 'redux-saga/effects'
 
 import { getPointTags } from '~/lib/time'
+import { getAuthTokenCookie } from '~/lib/session'
 
 import PlayerActions, { PlayerTypes } from '~/redux/player'
 import SpotifyActions from '~/redux/spotify'
@@ -176,7 +177,7 @@ controlPlayback = (socket) ->
             yield call([socket, socket.send], JSON.stringify({ action, data... }))
 
 export openDevicesWatcherWebsocket = ({ polling }) ->
-    token = yield select((state) -> state.auth.authToken)
+    token = getAuthTokenCookie()
     socket = new WebSocket("#{ config.WS_URL }/devices-watcher/#{ polling }?token=#{ token }")
     socketChannel = yield call(watchMessages, socket)
     yield put(PlayerActions.setState(devicesWatcherWebsocketOpen: true))
@@ -194,7 +195,7 @@ export openDevicesWatcherWebsocket = ({ polling }) ->
         socketChannel.close()
 
 export openPlaybackControllerWebsocket = () ->
-    token = yield select((state) -> state.auth.authToken)
+    token = getAuthTokenCookie()
     socket = new WebSocket("#{ config.WS_URL }/playback-controller?token=#{ token }")
     socketChannel = yield call(watchMessages, socket)
     yield put(PlayerActions.setState(playbackControllerWebsocketOpen: true))

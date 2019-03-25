@@ -19,7 +19,6 @@ import Sentry from '~/lib/sentry'
 import { randomInt } from '~/lib/util'
 
 import createStore from '~/redux'
-import AuthActions from '~/redux/auth'
 import SpotifyActions from '~/redux/spotify'
 import UIActions from '~/redux/ui'
 
@@ -93,7 +92,6 @@ class MyApp extends App
 
         fetchedProps = {
             user: user
-            authToken: api.getAuthToken()
             (pageProps.fetched ? {})...
         }
 
@@ -150,10 +148,7 @@ class MyApp extends App
 
         actions = [
             UIActions.setState(@props.initial)
-            AuthActions.setAuthenticated(@props.authenticated)
         ]
-        if @props.fetched?.authToken?
-            actions.push(AuthActions.setAuthToken(@props.fetched.authToken))
 
         if @props.fetched?.user?
             user = @props.fetched.user
@@ -272,7 +267,6 @@ class MyApp extends App
 
 
 mapStateToProps = ({ ui, auth, spotify }) ->
-    authToken    : auth.authToken
     color        : ui.color
     description  : ui.description
     errorMessage : spotify.errorMessage
