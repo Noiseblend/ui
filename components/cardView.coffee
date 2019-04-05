@@ -291,7 +291,7 @@ CardView = (props) ->
             align-items-center
             w-100
             item-list'>
-            {props.items?.map((item, i) ->
+            {props.items?.filter((item) -> item?)?.map((item, i) ->
                 clicked = item.name is props.clickedItem?.name
                 borderRadius = if clicked then 0 else props.borderRadius
 
