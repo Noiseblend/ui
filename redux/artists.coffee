@@ -275,7 +275,7 @@ replaceLoadingArtists = (state, { artists }) -> {
 
 clearLoadingArtists = (state) -> {
     state...
-    artists: (a for a in state.artists when not a.loading)
+    artists: (a for a in state.artists when a? and not a.loading)
 }
 
 setTimeRange = (state, { timeRange }) -> {
