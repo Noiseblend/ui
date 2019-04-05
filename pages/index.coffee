@@ -81,17 +81,17 @@ class Index extends React.Component
         if not hasCookieAlexaParams and not authenticated
             setAlexaParams(queryAlexaParams, ctx)
 
-        if authenticated and user?.firstLogin and isServer
-            if user?.spotifyPremium
-                pages = ["/artists", "/genres", "/blend"]
-                redirectedPage = pages[randomInt(0, 3)]
-            else
-                pages = ["/artists", "/genres"]
-                redirectedPage = pages[randomInt(0, 2)]
+        # if authenticated and user?.firstLogin and isServer
+        #     if user?.spotifyPremium
+        #         pages = ["/artists", "/genres", "/blend"]
+        #         redirectedPage = pages[randomInt(0, 3)]
+        #     else
+        #         pages = ["/artists", "/genres"]
+        #         redirectedPage = pages[randomInt(0, 2)]
 
-            await api.setUserDetails(firstLogin: false)
-            redirect({target: redirectedPage, res, isServer})
-            await return props
+        #     await api.setUserDetails(firstLogin: false)
+        #     redirect({target: redirectedPage, res, isServer})
+        #     await return props
 
         await return props
 
