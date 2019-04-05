@@ -55,16 +55,25 @@ class Genres extends React.Component
 
         actions = []
         if @props.fetched?.genres?
-            remainingGenres = @props.fetched.genres[timeRangeKey][config.CARD_LIMIT..]
-            actions = [
-                GenreActions.setAllGenres({
-                    @props.fetched.genres...
-                    "#{ timeRangeKey }": remainingGenres
-                })
-                GenreActions.setGenres(
-                    @props.fetched.genres[timeRangeKey][...(config.CARD_LIMIT)]
-                )
-            ]
+            remainingGenres = @props.fetched.genres[timeRangeKey]?[config.CARD_LIMIT..]
+            if remainingGenres?
+                actions = [
+                    GenreActions.setAllGenres({
+                        @props.fetched.genres...
+                        "#{ timeRangeKey }": remainingGenres
+                    })
+                    GenreActions.setGenres(
+                        @props.fetched.genres[timeRangeKey][...(config.CARD_LIMIT)]
+                    )
+                ]
+            else
+                actions = [
+                    GenreActions.setAllGenres({
+                        @props.fetched.genres...
+                        "#{ timeRangeKey }": []
+                    })
+                    GenreActions.setGenres([])
+                ]
 
         actions.push(GenreActions.finishFetchingGenres())
         if config.TIME_RANGE_MAPPING[timeRange]?

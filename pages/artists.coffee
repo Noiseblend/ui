@@ -64,16 +64,25 @@ class Artists extends React.Component
 
         actions = []
         if @props.fetched?.artists?
-            remainingArtists = @props.fetched.artists[timeRangeKey][config.CARD_LIMIT..]
-            actions = [
-                ArtistActions.setAllArtists({
-                    @props.fetched.artists...
-                    "#{ timeRangeKey }": remainingArtists
-                })
-                ArtistActions.setArtists(
-                    @props.fetched.artists[timeRangeKey][...config.CARD_LIMIT]
-                )
-            ]
+            remainingArtists = @props.fetched.artists[timeRangeKey]?[config.CARD_LIMIT..]
+            if remainingArtists?
+                actions = [
+                    ArtistActions.setAllArtists({
+                        @props.fetched.artists...
+                        "#{ timeRangeKey }": remainingArtists
+                    })
+                    ArtistActions.setArtists(
+                        @props.fetched.artists[timeRangeKey][...config.CARD_LIMIT]
+                    )
+                ]
+            else
+                actions = [
+                    ArtistActions.setAllArtists({
+                        @props.fetched.artists...
+                        "#{ timeRangeKey }": []
+                    })
+                    ArtistActions.setArtists([])
+                ]
 
         actions.push(ArtistActions.finishFetchingArtists())
         if config.TIME_RANGE_MAPPING[timeRange]?
