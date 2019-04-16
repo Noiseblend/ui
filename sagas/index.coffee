@@ -22,7 +22,7 @@ import {
     searchArtists,
     setArtistTimeRange
 } from './artists'
-import { startAuthentication } from './auth'
+import { startAuthentication, alexaAuthentication } from './auth'
 import { cache } from './cache'
 import {
     dislikeCity,
@@ -84,6 +84,7 @@ export default getRootSaga = (ctx) ->
             takeLatest(ArtistTypes.SET_TIME_RANGE, setArtistTimeRange, api)
             takeLatest(ArtistTypes.SEARCH_ARTISTS, searchArtists, api)
             takeLatest(AuthTypes.START_AUTHENTICATION, startAuthentication, api)
+            takeLatest(AuthTypes.ALEXA_AUTHENTICATION, alexaAuthentication, api)
             takeEvery(CacheTypes.CACHE, cache)
             takeLatest(CityTypes.DISLIKE_CITY, dislikeCity, api)
             takeLatest(CityTypes.FETCH_CITIES, fetchCities, api)

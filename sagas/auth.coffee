@@ -17,3 +17,16 @@ export startAuthentication = (api) ->
     window.location.replace(authorizationUrl)
 
     return
+
+export alexaAuthentication = (api, {queryAlexaParams, cookieAlexaParams, hasQueryAlexaParams, hasCookieAlexaParams}) ->
+    codeRes = yield call(api.oauthCode)
+    if codeRes.ok
+        { code } = codeRes.data
+        { redirect_uri, state } =
+            if hasQueryAlexaParams
+                queryAlexaParams
+            else
+                cookieAlexaParams
+        if hasCookieAlexaParams
+            removeAlexaParams(ctx)
+        window.location.replace("#{ redirect_uri }?state=#{ state }&code=#{ code }")

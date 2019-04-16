@@ -3,6 +3,7 @@ import { createActions, createReducer } from 'reduxsauce'
 import Immutable from 'seamless-immutable'
 
 { Types, Creators } = createActions(
+    alexaAuthentication: ['queryAlexaParams', 'cookieAlexaParams', 'hasQueryAlexaParams', 'hasCookieAlexaParams']
     startAuthentication: null
     finishAuthentication: ['code', 'state']
     authenticationSuccess: null

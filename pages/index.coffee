@@ -58,25 +58,13 @@ class Index extends React.Component
             cookieAlexaParams.client_id is "alexa-blend" and
             cookieAlexaParams.redirect_uri in config.ALEXA_REDIRECT_URIS
 
-        if (hasQueryAlexaParams or hasCookieAlexaParams) and authenticated
-            codeRes = await api.oauthCode()
-            if codeRes.ok
-                { code } = codeRes.data
-                { redirect_uri, state } =
-                    if hasQueryAlexaParams
-                        queryAlexaParams
-                    else
-                        cookieAlexaParams
-                if hasCookieAlexaParams
-                    removeAlexaParams(ctx)
-                redirect(
-                    {
-                        target: "#{ redirect_uri }?state=#{ state }&code=#{ code }"
-                        res
-                        isServer
-                        statusCode: 302
-                    }
-                )
+        props = {
+            props...
+            hasQueryAlexaParams
+            hasCookieAlexaParams
+            queryAlexaParams
+            cookieAlexaParams
+        }
 
         if not hasCookieAlexaParams and not authenticated
             setAlexaParams(queryAlexaParams, ctx)
@@ -112,6 +100,17 @@ class Index extends React.Component
             Router.replace("/", "/", shallow: true)
         else if query?.token?
             Router.replace("/", "/", shallow: true)
+
+        authParams = {
+            hasQueryAlexaParams
+            hasCookieAlexaParams
+            queryAlexaParams
+            cookieAlexaParams
+            authenticated
+        } = @props
+
+        if (hasQueryAlexaParams or hasCookieAlexaParams) and authenticated
+            @props.alexaAuthentication(authParams)
 
     render: () ->
         { authenticated, authenticating, emailConfirmed, actions... } = @props
@@ -179,5 +178,9 @@ mapDispatchToProps = (dispatch) ->
     batchActions: (actions) -> dispatch(actions)
     startAuthentication: () ->
         dispatch(AuthActions.startAuthentication())
+    alexaAuthentication: ({queryAlexaParams, cookieAlexaParams, hasQueryAlexaParams, hasCookieAlexaParams}) ->
+        dispatch(AuthActions.alexaAuthentication(
+            queryAlexaParams, cookieAlexaParams, hasQueryAlexaParams, hasCookieAlexaParams
+        ))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Index)
