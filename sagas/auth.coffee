@@ -27,6 +27,4 @@ export alexaAuthentication = (api, {queryAlexaParams, cookieAlexaParams, hasQuer
                 queryAlexaParams
             else
                 cookieAlexaParams
-        if hasCookieAlexaParams
-            removeAlexaParams(ctx)
         window.location.replace("#{ redirect_uri }?state=#{ state }&code=#{ code }")
