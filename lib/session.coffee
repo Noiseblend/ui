@@ -44,7 +44,7 @@ export setCookie = (key, value, ctx = {}, expires = 7) ->
 
 export removeCookie = (key, ctx = {}, expires = 7) ->
     if ctx.isServer
-        setCookieToServer(key, "", ctx.res, -1000)
+        setCookieToServer(key, "", ctx.res, ctx.req, -1000)
     else
         cookie.remove(key, path: "/")
 
@@ -54,7 +54,7 @@ export getCookie = (key, ctx = {}) ->
     else
         getCookieFromBrowser(key)
 
-setCookieToServer = (key, value, res, expires) ->
+setCookieToServer = (key, value, res, req, expires) ->
     expireDate = new Date()
     expireDate.setMilliseconds(expireDate.getMilliseconds() + expires * 864e5)
     oldCookies = res.getHeader("set-cookie")
@@ -68,6 +68,10 @@ setCookieToServer = (key, value, res, expires) ->
             [oldCookies..., newCookie]
 
     res.setHeader("Set-Cookie", newCookies)
+
+    if req?.headers?.cookie?
+        oldCookies = req.headers.cookie.split(";").filter((c) -> not c.trim().startsWith("#{ key }="))
+        req.headers.cookie = [oldCookies..., "#{ key }=#{ value }"].join(";")
 
 setCookieToBrowser = (key, value, expires) ->
     cookie.set(key, value, expires: expires, path: "/")
