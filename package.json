@@ -18,6 +18,7 @@
         "animejs": "^3.0.1",
         "apisauce": "^1.0.2",
         "atob": "^2.1.2",
+        "axios": "0.18.1",
         "color": "^3.1.0",
         "create-react-class": "^15.6.3",
         "extend": "^3.0.2",
@@ -39,7 +40,7 @@
         "redux": "^4.0.1",
         "redux-saga": "^1.0.2",
         "redux-undo": "^1.0.0-beta9-9-7",
-        "reduxsauce": "^1.0.1",
+        "reduxsauce": "^1.1.0",
         "seamless-immutable": "^7.1.4",
         "uuid": "^3.3.2"
     },
