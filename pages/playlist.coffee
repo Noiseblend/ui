@@ -393,6 +393,10 @@ class Playlist extends React.Component
                     }
                 </>
             }
+            <style global jsx>{"""#{} // stylus
+                body
+                    overflow-x hidden !important
+            """}</style>
         </div>
 
 mapStateToProps = (state) ->

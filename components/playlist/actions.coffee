@@ -33,19 +33,18 @@ HIDDEN_WIDTH =
 class Actions extends React.PureComponent
     showOpenActions: () ->
         size = if @props.mobile then 'mobile' else 'desktop'
-        anime.timeline(duration: 800).add(
+        anime.timeline(duration: 600).add(
             targets: '.open-links'
             width: OPEN_ACTION_WIDTH[size]
         ).add(
             targets: '.open-button'
             translateY: -OPEN_ACTION_HEIGHT[size]
-            offset: '-=600'
+            offset: '-=500'
             delay: (el, i) -> i * 150
         ).add(
             targets: '.open-button'
             translateY: 0
-            offset: 8000
-            delay: (el, i, l) -> (l - i) * 100
+            delay: 6000
         ).add(
             targets: '.open-links'
             offset: '-=400'

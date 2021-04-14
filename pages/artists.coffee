@@ -304,10 +304,10 @@ class Artists extends React.Component
                         </RoundedButton>
                     </Link>
                 </div>
-                <style global jsx>{ """#{} // stylus
+                <style global jsx>{"""#{} // stylus
                     body
                         overflow-x hidden
-                """ }</style>
+                """}</style>
                 <style jsx>{ """#{} // stylus
                     #artists-container
                         margin-top navbarHeightDesktop
