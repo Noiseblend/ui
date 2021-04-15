@@ -1,10 +1,10 @@
 FROM node:alpine
 
 VOLUME /cache
-WORKDIR /app
+WORKDIR /appdev
 
-RUN cd /app; yarn --cache-folder /cache install
-RUN cd /app; yarn --cache-folder /cache upgrade caniuse-lite browserslist
+RUN cd /appdev; yarn --cache-folder /cache install
+RUN cd /appdev; yarn --cache-folder /cache upgrade caniuse-lite browserslist
 
 ARG SENTRY_AUTH_TOKEN
 ARG SENTRY_DSN
