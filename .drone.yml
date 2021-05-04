@@ -1,0 +1,51 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: docker
+    image: plugins/docker
+    settings:
+      auto_tag: true
+      build_args:
+        - BUILDKIT_INLINE_CACHE=1
+        - SENTRY_DSN=https://7a3ddfbacc0c4e2d98f105aa0f184e0b@sentry.io/1209883
+        - SENTRY_AUTH_TOKEN
+        - SENTRY_RELEASE=$TRAVIS_COMMIT
+        - LOCAL_API_URL=http://api:9000/
+        - REMOTE_API_URL=https://api.noiseblend.com/
+        - LOCAL_WS_URL=ws://api:9000
+        - REMOTE_WS_URL=wss://api.noiseblend.com
+        - DOMAIN=www.noiseblend.com .
+      password:
+        from_secret: docker_password
+      repo: Noiseblend/ui
+      username: alinpanaitiu
+      purge: false
+      environment:
+        SENTRY_AUTH_TOKEN:
+          from_secret: sentry_token
+
+  - name: deploy
+    image: curlimages/curl
+    commands:
+      - curl -L -s -S https://alin:$${DEPLOY_PASSWORD}@deploy.darkwoods.win/noiseblend
+    environment:
+      DEPLOY_PASSWORD:
+        from_secret: deploy_password
+    when:
+      branch:
+        - master
+    depends_on:
+      - docker
+
+---
+kind: signature
+hmac: 36ac5a659900abb2d6976c6f98c2224828e45e1014344893fd4c5ad9f707a6c7
+
+...

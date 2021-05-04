@@ -1,0 +1,17 @@
+repos:
+  - repo: local
+    hooks:
+      - id: secrets
+        name: Hide secrets
+        language: system
+        files: .env
+        entry: git secret hide -m
+        pass_filenames: false
+        stages: [commit]
+
+      - id: drone-lint-fmt-sign
+        name: Validate Drone configuration
+        language: system
+        files: .drone.yml
+        entry: sh -c 'drone lint; drone sign --save Noiseblend/ui'
+        stages: [commit]
