@@ -44,6 +44,10 @@ export default class MyDocument extends Document
                         @googleFonts(config.FONTS)
                     ]}
                 />
+                <script
+                    async defer data-domain="noiseblend.com"
+                    src="https://plausible.alinpanaitiu.com/js/plausible.js">
+                </script>
             </Head>
             <body>
                 <Main />
