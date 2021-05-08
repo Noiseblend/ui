@@ -24,7 +24,7 @@
         "extend": "^3.0.2",
         "js-cookie": "^2.2.0",
         "lodash": "^4.17.21",
-        "next": "^8.0.3",
+        "next": "^9.3.2",
         "next-redux-wrapper": "^3.0.0-alpha.2",
         "node-vibrant": "^3.2.0-alpha",
         "prop-types": "^15.7.2",
