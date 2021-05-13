@@ -18,13 +18,14 @@ steps:
       build_args:
         - BUILDKIT_INLINE_CACHE=1
         - SENTRY_DSN=https://3ce14c5eda584570954a7ba2156bb0af@o84592.ingest.sentry.io/1209883
-        - SENTRY_AUTH_TOKEN
         - SENTRY_RELEASE=$TRAVIS_COMMIT
         - LOCAL_API_URL=http://api:9000/
         - REMOTE_API_URL=https://api.noiseblend.com/
         - LOCAL_WS_URL=ws://api:9000
         - REMOTE_WS_URL=wss://api.noiseblend.com
-        - DOMAIN=www.noiseblend.com .
+        - DOMAIN=www.noiseblend.com
+      build_args_from_env:
+        - SENTRY_AUTH_TOKEN
       password:
         from_secret: docker_password
       repo: noiseblend/ui
@@ -64,6 +65,6 @@ steps:
 
 ---
 kind: signature
-hmac: 89491658002e69fb7d338bcf072378498e2953200782ac14602c226288c3d2e1
+hmac: 9e09f2f8d0598f85c0e0e5872102c6af2bfb6a35cbbb3f75a1b9321829a99a99
 
 ...
