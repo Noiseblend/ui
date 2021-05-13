@@ -18,7 +18,7 @@ steps:
       build_args:
         - BUILDKIT_INLINE_CACHE=1
         - SENTRY_DSN=https://3ce14c5eda584570954a7ba2156bb0af@o84592.ingest.sentry.io/1209883
-        - SENTRY_RELEASE=$TRAVIS_COMMIT
+        - SENTRY_RELEASE=${DRONE_COMMIT}
         - LOCAL_API_URL=http://api:9000/
         - REMOTE_API_URL=https://api.noiseblend.com/
         - LOCAL_WS_URL=ws://api:9000
@@ -65,6 +65,6 @@ steps:
 
 ---
 kind: signature
-hmac: 9e09f2f8d0598f85c0e0e5872102c6af2bfb6a35cbbb3f75a1b9321829a99a99
+hmac: 0b228228085fbbc414bd6b664c930f0f7faae692c2c9139655266dd58d32c389
 
 ...
