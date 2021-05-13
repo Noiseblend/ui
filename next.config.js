@@ -107,17 +107,17 @@ module.exports = (phase, { defaultConfig }) => {
                     config.plugins.push(
                         new LodashModuleReplacementPlugin({ shorthands: true })
                     )
-                    config.plugins.push(
-                        new SentryCliPlugin({
-                            authToken: env.SENTRY_AUTH_TOKEN,
-                            release: env.SENTRY_RELEASE,
-                            rewrite: true,
-                            include: '.next',
-                            dryRun: dev || env.SKIP_SENTRY,
-                            debug: dev,
-                            urlPrefix: `https://${env.DOMAIN}/_next/`
-                        })
-                    )
+                    // config.plugins.push(
+                    //     new SentryCliPlugin({
+                    //         authToken: env.SENTRY_AUTH_TOKEN,
+                    //         release: env.SENTRY_RELEASE,
+                    //         rewrite: true,
+                    //         include: '.next',
+                    //         dryRun: dev || env.SKIP_SENTRY,
+                    //         debug: dev,
+                    //         urlPrefix: `https://${env.DOMAIN}/_next/`
+                    //     })
+                    // )
 
                     if (dev) {
                         config.devtool = 'eval'
