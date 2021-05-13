@@ -52,7 +52,6 @@ module.exports = (phase, { defaultConfig }) => {
                     sentryDSN: env.SENTRY_DSN,
                     sentryRelease: env.SENTRY_RELEASE,
                     sentryEnvironment: env.SENTRY_ENVIRONMENT,
-                    authToken: env.SENTRY_AUTH_TOKEN,
                     localApiURL: env.LOCAL_API_URL,
                     remoteApiURL: env.REMOTE_API_URL,
                     localWsURL: env.LOCAL_WS_URL,
@@ -110,6 +109,7 @@ module.exports = (phase, { defaultConfig }) => {
                     )
                     config.plugins.push(
                         new SentryCliPlugin({
+                            authToken: env.SENTRY_AUTH_TOKEN,
                             release: env.SENTRY_RELEASE,
                             rewrite: true,
                             include: '.next',
