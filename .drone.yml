@@ -7,6 +7,9 @@ platform:
   os: linux
   arch: amd64
 
+environment:
+  DOCKER_BUILDKIT: "1"
+
 steps:
   - name: docker
     image: plugins/docker
@@ -14,7 +17,7 @@ steps:
       auto_tag: true
       build_args:
         - BUILDKIT_INLINE_CACHE=1
-        - SENTRY_DSN=https://7a3ddfbacc0c4e2d98f105aa0f184e0b@sentry.io/1209883
+        - SENTRY_DSN=https://3ce14c5eda584570954a7ba2156bb0af@o84592.ingest.sentry.io/1209883
         - SENTRY_AUTH_TOKEN
         - SENTRY_RELEASE=$TRAVIS_COMMIT
         - LOCAL_API_URL=http://api:9000/
@@ -24,9 +27,11 @@ steps:
         - DOMAIN=www.noiseblend.com .
       password:
         from_secret: docker_password
-      repo: Noiseblend/ui
+      repo: noiseblend/ui
       username: alinpanaitiu
       purge: false
+      cache_from:
+        - noiseblend/ui:latest
       environment:
         SENTRY_AUTH_TOKEN:
           from_secret: sentry_token
@@ -44,8 +49,21 @@ steps:
     depends_on:
       - docker
 
+  - name: cloudflare
+    image: jetrails/drone-cloudflare-caching
+    settings:
+      api_token:
+        from_secret: cloudflare_cache_purge_token
+      zone_identifier: 4261720d9ab40fdc12b31ba8c63d6fdf
+      action: purge_everything
+    when:
+      branch:
+        - master
+    depends_on:
+      - deploy
+
 ---
 kind: signature
-hmac: 36ac5a659900abb2d6976c6f98c2224828e45e1014344893fd4c5ad9f707a6c7
+hmac: 89491658002e69fb7d338bcf072378498e2953200782ac14602c226288c3d2e1
 
 ...
