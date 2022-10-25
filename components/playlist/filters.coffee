@@ -12,32 +12,30 @@ Filters = (props) ->
     <div
         style={ props.style }
         className="d-flex align-items-center">
-        <h5 style={ color: colors.GRAY } className='my-0 py-0'>Show:</h5>
         <ToggleButton
-            className='ml-4 p-1 explicit-button'
-            width={ 100 }
+            className='ml-1 px-2 py-1 explicit-button'
             color={ colors.MARS_RED }
             toggled={ not props.filterExplicit }
             onClick={ () -> props.setFilterExplicit(not props.filterExplicit) }
             style={
-                fontSize: '0.8rem'
+                fontSize: if props.mobile then '0.7rem' else '0.8rem'
             }>
             Explicit
         </ToggleButton>
         <ToggleButton
-            className='ml-4 p-1 dislikes-button'
-            width={ 100 }
+            className='ml-1 px-2 py-1 dislikes-button'
             color={ colors.MARS_RED }
             toggled={ not props.filterDislikes }
             onClick={ () -> props.setFilterDislikes(not props.filterDislikes) }
             style={
-                fontSize: '0.8rem'
+                fontSize: if props.mobile then '0.7rem' else '0.8rem'
             }>
             Disliked
         </ToggleButton>
     </div>
 
 mapStateToProps = (state) ->
+    mobile: state.ui.mobile
     filterExplicit: state.playlists.present.filterExplicit
     filterDislikes: state.playlists.present.filterDislikes
 

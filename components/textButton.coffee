@@ -33,7 +33,7 @@ TextButton = ({
                 box-shadow none
 
                 &:hover
-                    filter: brightness(110%) \
+                    filter: brightness(140%) \
                         #{ if shadow
                            "drop-shadow(0 0 #{ shadow ? 0 }px #{ hoverColor ? color })"
                         else

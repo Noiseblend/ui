@@ -47,6 +47,7 @@ filterName = /\s*\(no\s*(explicit|dislikes|explicit\/dislikes)\)/
     setFilterDislikes: ['filterDislikes']
     toggleSidebar: null
     setRecommended: ['recommended']
+    setModified: null
     dislikeArtist: ['artist']
     setSidebarHidden: ['sidebarHidden']
 , { prefix: 'playlists/' })
@@ -422,6 +423,11 @@ resetPlaylist = (state) -> {
     modified: { state.modified..., order: not _.isEqual(state.order, state.saved.order) }
 }
 
+setModified = (state) -> {
+    state...
+    modified: { state.modified..., tracks: true }
+}
+
 
 ACTION_HANDLERS =
     "#{ Types.ADD_TRACKS }": addTracks
@@ -455,6 +461,7 @@ ACTION_HANDLERS =
     "#{ Types.SET_NAME }": setName
     "#{ Types.SET_RECOMMENDED }": setRecommended
     "#{ Types.SET_TRACKS }": setTracks
+    "#{ Types.SET_MODIFIED }": setModified
     "#{ Types.TOGGLE_SIDEBAR }": toggleSidebar
     "#{ Types.SET_SIDEBAR_HIDDEN }": setSidebarHidden
     "#{ Types.FILTER_PLAYLIST }": filterPlaylist

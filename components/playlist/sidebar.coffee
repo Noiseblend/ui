@@ -41,6 +41,7 @@ applyDeferredTuning = _.debounce(apply, config.POLLING.APPLY_TUNING)
 setAttributeValue = (attribute, value, { batchActions, tuneableAttributes }) ->
     batchActions([
         RecommendationActions.setTuneableAttribute(attribute, value)
+        PlaylistActions.setModified()
     ])
 
 setAttributeOrder = (attribute, order, { batchActions }, reset = false) ->
@@ -52,9 +53,20 @@ setAttributeOrder = (attribute, order, { batchActions }, reset = false) ->
             PlaylistActions.applyOrder()
     ])
 
+onSelect = (props, key) ->
+    if props.activeMode is key
+        props.onChange(null)
+    else
+        props.onChange(key)
+
 onChange = (key, value, props) ->
     if key is 'key'
         oldValue = props.tuneableAttributes?.key
+        if value isnt oldValue
+            setAttributeValue(key, value, props)
+            applyDeferredTuning(props)
+    else if key is 'mode'
+        oldValue = props.tuneableAttributes?.mode
         if value isnt oldValue
             setAttributeValue(key, value, props)
             applyDeferredTuning(props)
@@ -202,10 +214,71 @@ class TuneableAttribute extends React.PureComponent
             """}</style>
         </div>
 
+ModeSelector = (props) ->
+    accentColor = if props.dark then colors.PEACH else colors.MAGENTA
+    grayColor = if props.dark then colors.LIGHT_GRAY.alpha(0.7) else colors.DARK_GRAY
+    <div>
+        <div className='
+            d-flex
+            flex-row
+            justify-content-between
+            align-items-center
+            key-row'>
+
+            <h5
+                key="major"
+                className="
+                    key-item
+                    #{ classif(props.disabled, 'disabled') }
+                    #{ classif(props.activeMode is 1, 'active') }"
+                onClick={ () -> onSelect(props, 1) unless props.disabled }>
+                Major
+            </h5>
+            <h5
+                key="minor"
+                className="
+                    key-item
+                    #{ classif(props.disabled, 'disabled') }
+                    #{ classif(props.activeMode is 0, 'active') }"
+                onClick={ () -> onSelect(props, 0) unless props.disabled }>
+                Minor
+            </h5>
+
+            <style global jsx>{"""#{} // stylus
+                sup.sharp
+                    width 11.2px
+
+                .key-item
+                    font-weight bold
+                    margin-left .5rem
+                    margin-right .5rem
+                    ease-out 0.3s color 'text-shadow'
+                    cursor pointer
+                    color #{ grayColor }
+
+                .key-item span.sharp
+                    margin-right -11.2px
+
+                .key-item.active
+                    color #{ accentColor }
+
+                .key-item:not(.disabled):hover
+                    color #{ accentColor }
+                    text-shadow 0 0 4px #{ accentColor }
+
+                .key-row
+                    width #{ props.rowWidth ? 250 }px
+                    height 35px
+
+            """}</style>
+        </div>
+    </div>
+
+
 class TuneableKey extends React.PureComponent
     render: ->
         {
-            className, id, style, children, tuning,
+            className, id, style, children, tuning, order,
             tuneableAttributes, rowWidth, props...
         } = @props
         <div
@@ -218,11 +291,16 @@ class TuneableKey extends React.PureComponent
                 tuning-item
                 #{ className ? '' }"
             ref={ props.ref }>
-            <h6
-                style={ color: colors.BLACK.lighten(0.2) }
-                className='text-center mb-3 mx-2'>
-                Key
-            </h6>
+            <SortableAttribute
+                disabled={ tuning }
+                dark={ true }
+                key="key-attr"
+                name="Key"
+                setOrder={ (direction) ->
+                    setOrder("key", direction, { order, props... }) }
+                direction={ order["key"] }
+                arrowSize={ ARROW_SIZE } />
+
             <div className='key-selector'>
                 <KeySelector
                     disabled={ tuning }
@@ -230,6 +308,14 @@ class TuneableKey extends React.PureComponent
                     rowWidth={ rowWidth }
                     onChange={ (key) -> onChange('key', key, props) }
                     activeKey={ tuneableAttributes?.key } />
+            </div>
+            <div className='mode-selector'>
+                <ModeSelector
+                    disabled={ tuning }
+                    dark={ true }
+                    rowWidth={ rowWidth }
+                    onChange={ (mode) -> onChange('mode', mode, props) }
+                    activeMode={ tuneableAttributes?.mode } />
             </div>
             <style jsx>{"""#{} // stylus
                 .key-selector
@@ -316,6 +402,12 @@ PlaylistSidebar = (props) ->
                     }
                     easing='ease-out'
                     style={ width: props.width - 60 }>
+                    <TuneableKey
+                        style={ width: props.width - 60 }
+                        rowWidth={ sliderWidth }
+                        { props... }
+                    />
+
                     {attrs[...3].map((attr, i) ->
                         shouldShow = (
                             not attr.notSortable or
@@ -366,13 +458,6 @@ PlaylistSidebar = (props) ->
                                 { props... }
                             />
                     )}
-                    {if props.playlist?.discover
-                        <TuneableKey
-                            style={ width: props.width - 60 }
-                            rowWidth={ sliderWidth }
-                            { props... }
-                        />
-                    }
                 </FlipMove>
                 <ResetTuningButton disabled={ props.tuning } />
             </div>

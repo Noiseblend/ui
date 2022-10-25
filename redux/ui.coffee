@@ -38,14 +38,14 @@ export INITIAL_STATE = Immutable(
     mobile: false
     mediumScreen: false
     undoHidden: true
-    openLinksVisible: false
+    openLinksVisible: true
     circularMenuOpen: false
     showAdditionalPlaylists: false
     focusProfile: false
     focusHome: false
     showTooltipProfile: false
     showTooltipHome: false
-    showMoreAttributes: false
+    showMoreAttributes: true
     fallbackUserImage: null
     background: null
     icon: null

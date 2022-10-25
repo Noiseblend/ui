@@ -82,6 +82,7 @@ colors =
     DARK_BLUE     : '#050129'
     BLACK_MAUVE   : '#292837'
     BMAC_ORANGE   : '#ff813f'
+    MUTED_RED     : '#645656'
 
 for name of colors
     colors[name] = Color(colors[name])

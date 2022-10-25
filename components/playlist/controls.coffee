@@ -24,7 +24,10 @@ Controls = (props) ->
         <DevicesDrawer
             playOn={ props.playOn }
             close={ props.closeDrawer }
-            style={ overflow: 'hidden' } />
+            style={
+                overflow: 'hidden'
+                pointerEvents: 'all'
+            } />
         <style global jsx>{"""#{} // stylus
             .controls::-webkit-scrollbar
                 display none
@@ -37,6 +40,7 @@ Controls = (props) ->
             .controls
                 overflow hidden
                 z-index 1
+                pointer-events none
         """}</style>
     </div>
 

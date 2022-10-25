@@ -33,6 +33,48 @@ import Filters from './filters'
 import ResetTuningButton from './resetTuningButton'
 import Title from './title'
 
+COLUMN_WIDTH = 200
+AUDIO_FEATURE_KEYS = [
+        "acousticness",
+        "danceability",
+        "durationMs",
+        "energy",
+        "instrumentalness",
+        "liveness",
+        "loudness",
+        "speechiness",
+        "tempo",
+        "timeSignature",
+        "valence"
+]
+AUDIO_FEATURE_KEY_HEADINGS = [
+        "Acoustic",
+        "Danceable",
+        "Duration",
+        "Energy",
+        "Instrumental",
+        "Live",
+        "Loud",
+        "Vocal",
+        "Tempo",
+        "Time",
+        "Happy"
+]
+
+msToTime = (duration) ->
+    milliseconds = Math.floor((duration % 1000) / 100)
+    seconds = Math.floor((duration / 1000) % 60)
+    minutes = Math.floor((duration / (1000 * 60)) % 60)
+    hours = Math.floor((duration / (1000 * 60 * 60)) % 24)
+
+    hoursStr = if (hours < 10) then "0" + hours else hours
+    minutesStr = if (minutes < 10) then "0" + minutes else minutes
+    secondsStr = if (seconds < 10) then "0" + seconds else seconds
+
+    if hours > 0
+        hoursStr + ":" + minutesStr + ":" + secondsStr
+    else
+        minutesStr + ":" + secondsStr
 
 class PlaylistView extends React.Component
     constructor: (props) ->
@@ -159,7 +201,6 @@ class PlaylistView extends React.Component
                 style={
                     background: 'transparent'
                     border: 'none'
-                    marginBottom: -16
                 }
                 onClick={ () =>
                     if not @clickedPreview
@@ -167,13 +208,6 @@ class PlaylistView extends React.Component
                         @preview(track)
                 }>
                 { icon }
-                <span className='text-center' style={
-                    fontSize: 12
-                    opacity: if previewing then 1 else 0
-                    transition: 'opacity 0.3s ease-in'
-                }>
-                    Preview
-                </span>
             </TextButton>
 
     dislike: (track) ->
@@ -214,119 +248,201 @@ class PlaylistView extends React.Component
                 top
                 show={ not @props.undoHidden }
                 onClick={ () => @onUndo() } />
-            <Title style={ marginLeft: 10 } />
-            <Actions
-                style={ marginLeft: 10 }
-                onSavePlaylist={ @props.onSavePlaylist } />
-            <Filters style={ marginLeft: 12 } />
+            <Title style={ marginLeft: 0 } />
+            <div className='d-flex flex-center justify-content-between'>
+                <Actions
+                    style={ marginLeft: 4 }
+                    onSavePlaylist={ @props.onSavePlaylist } />
+                <Filters style={ marginRight: 4 } />
+            </div>
             {if @props.tracks.length > 0
-                <table className='w-100 track-table'>
-                     <thead>
-                         <tr>
-                             <th></th>
-                             <th className='text-center px-0'>#</th>
-                             <th>Title</th>
-                             <th>Artist</th>
-                             <th></th>
-                             <th></th>
-                             <th>Album</th>
-                         </tr>
-                     </thead>
-                     <InfiniteScroll
-                         element='tbody'
-                         initialLoad={ false }
-                         pageStart={ 0 }
-                         loadMore={ @props.fetchTracks }
-                         hasMore={ @props.hasMore }>
-                         <FlipMove
-                             typeName={ null }
-                             enterAnimation='fade'
-                             leaveAnimation={ null }>
-                             {@props.tracks.map((track, i) =>
-                                 <tr
-                                    style={
-                                        backgroundColor: if track.disliked
-                                            colors.MAGENTA.alpha(0.2)
-                                        else
-                                            'transparent'
-                                    }
-                                     key={ track.id }>
-                                     <td className='p-1 text-center'>
-                                        { @previewIcon(track) }
-                                    </td>
-                                    <th
-                                        className='text-center'
-                                        style={
-                                            width: 34
-                                            minWidth: 34
-                                            paddingLeft: 0
-                                            paddingRight: 0
-                                        }
-                                        scope='row'>
-                                        {if @state.previewingId is track.id
-                                            <Equalizer color={ colors.MAGENTA } />
-                                         else
-                                             i+1 }
+                <div
+                    style={{
+                        overflowX: 'scroll'
+                        height: '80vh'
+                    }}
+                    className="playlist-table-container">
+                    <table
+                        style={{
+                            width: if @props.sidebarHidden then '97vw' else "calc(100vw - #{ config.SIDEBAR_WIDTH }px)"
+                        }}
+                        className='track-table'>
+                         <thead>
+                             <tr>
+                                 <th key="play"></th>
+                                 <th key="#" className='text-center px-0'>#</th>
+                                 <th key="Title">Title</th>
+                                 <th key="Artist">Artist</th>
+                                 <th key="explicit"></th>
+                                 <th key="dislike"></th>
+                                 <th key="Album">Album</th>
+                                 <th
+                                     style={
+                                         width: 40
+                                         maxWidth: 40
+                                         minWidth: 40
+                                     }
+                                     key="Key">
+                                     Key
+                                 </th>
+                                 {AUDIO_FEATURE_KEY_HEADINGS.map((k) ->
+                                     <th
+                                         key={ k } className='text-truncate'>
+                                         { k }
                                      </th>
-                                     <td className='text-truncate'>{ track.name }</td>
-                                     <td className='text-truncate'>
-                                        { (a.name for a in track.artists).join(' & ') }
-                                    </td>
-                                    <td
+                                 )}
+                             </tr>
+                         </thead>
+                         <InfiniteScroll
+                             element='tbody'
+                             initialLoad={ false }
+                             pageStart={ 0 }
+                             loadMore={ @props.fetchTracks }
+                             hasMore={ @props.hasMore }>
+                             <FlipMove
+                                 typeName={ null }
+                                 enterAnimation='fade'
+                                 leaveAnimation={ null }>
+                                 {@props.tracks.map((track, i) =>
+                                     <tr
                                         style={
-                                            width: 20
-                                            maxWidth: 20
-                                            minWidth: 20
+                                            backgroundColor: if track.disliked
+                                                colors.MAGENTA.alpha(0.2)
+                                            else
+                                                'transparent'
                                         }
-                                        className='p-0 explicit-tag'>
-                                        { if track.explicit
-                                            color = colors.DARK_GRAY.mix(colors.RED, 0.5)
-                                            <div
-                                                className='
-                                                    font-heading
-                                                    mx-auto text-center
-                                                    d-flex justify-content-center
-                                                    align-items-center'
-                                                style={
-                                                    color: color
-                                                    border: "2px solid #{ color }"
-                                                    borderRadius: 4
-                                                    fontWeight: 700
-                                                    fontSize: 14
-                                                    width: 18
-                                                    maxWidth: 18
-                                                    minWidth: 18
-                                                }>
-                                                E
-                                            </div>
-                                        }
-                                    </td>
-                                    <td>
-                                        <DislikeButton
-                                            id={ i }
-                                            flip={ 'vertical' if track.disliked }
-                                            onClick={ () =>
-                                                if track.disliked
-                                                    @like(track)
-                                                else
-                                                    @dislike(track)
-                                                if @props.user.firstDislike
-                                                    @props.setUserDetails({
-                                                        firstDislike: false
-                                                    })
-                                                    @props.showProfileTooltipInHalfSecond()
-                                                    @props.setFocusProfile(true)
-                                                    @props.defocusProfileIn8Seconds()
-                                                    @props.hideProfileTooltipIn8Seconds()
+                                         key={ track.id }>
+                                         <td
+                                            style={
+                                                width: 40
+                                                maxWidth: 40
+                                                minWidth: 40
                                             }
-                                            backgroundColor='transparent'
-                                            color={ colors.WHITE } />
-                                    </td>
-                                    <td className='text-truncate'>{ track.album.name }</td>
-                             </tr>)}
-                         </FlipMove>
-                    </InfiniteScroll>
-                </table>
+                                             className='p-1 text-center'>
+                                            { @previewIcon(track) }
+                                        </td>
+                                        <td
+                                            className='text-center'
+                                            style={
+                                                width: 18
+                                                minWidth: 18
+                                                paddingLeft: 0
+                                                paddingRight: 0
+                                                opacity: 0.7
+                                                fontWeight: 700
+                                            }
+                                            scope='row'>
+                                            {if @state.previewingId is track.id
+                                                <Equalizer color={ colors.MAGENTA } />
+                                             else
+                                                 i+1 }
+                                         </td>
+                                         <td
+                                            style={
+                                                width: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                maxWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                minWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                            }
+                                            className='text-truncate'>{ track.name }</td>
+                                         <td
+                                            style={
+                                                width: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                maxWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                minWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                            }
+                                            className='text-truncate'>
+                                            { (a.name for a in track.artists).join(' & ') }
+                                        </td>
+                                        <td
+                                            style={
+                                                width: 20
+                                                maxWidth: 20
+                                                minWidth: 20
+                                            }
+                                            className='p-0 explicit-tag'>
+                                            { if track.explicit
+                                                color = colors.DARK_GRAY.mix(colors.RED, 0.5)
+                                                <div
+                                                    className='
+                                                        font-heading
+                                                        mx-auto text-center
+                                                        d-flex justify-content-center
+                                                        align-items-center'
+                                                    style={
+                                                        color: color
+                                                        border: "2px solid #{ color }"
+                                                        borderRadius: 4
+                                                        fontWeight: 700
+                                                        fontSize: 14
+                                                        width: 18
+                                                        maxWidth: 18
+                                                        minWidth: 18
+                                                    }>
+                                                    E
+                                                </div>
+                                            }
+                                        </td>
+                                        <td
+                                            style={
+                                                width: 50
+                                                maxWidth: 50
+                                                minWidth: 50
+                                            }
+                                        >
+                                            <DislikeButton
+                                                id={ i }
+                                                flip={ 'vertical' if track.disliked }
+                                                onClick={ () =>
+                                                    if track.disliked
+                                                        @like(track)
+                                                    else
+                                                        @dislike(track)
+                                                    if @props.user.firstDislike
+                                                        @props.setUserDetails({
+                                                            firstDislike: false
+                                                        })
+                                                        @props.showProfileTooltipInHalfSecond()
+                                                        @props.setFocusProfile(true)
+                                                        @props.defocusProfileIn8Seconds()
+                                                        @props.hideProfileTooltipIn8Seconds()
+                                                }
+                                                backgroundColor='transparent'
+                                                color={ colors.WHITE } />
+                                        </td>
+                                        <td
+                                            style={
+                                                width: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                maxWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                                minWidth: if @props.sidebarHidden or @props.mobile then COLUMN_WIDTH else (COLUMN_WIDTH * 0.6)
+                                            }
+                                            className='text-truncate'>{ track.album.name }</td>
+                                        <td className='text-truncate'>
+                                            { "#{ config.KEY_MAPPING[track.audioFeatures?.key] ? "" }#{ if track.audioFeatures?.mode is 0 then "m" else "" }" }
+                                        </td>
+                                        {AUDIO_FEATURE_KEYS.map((k) ->
+                                            <td key={ k } className='text-truncate'>
+                                                { if k is 'tempo'
+                                                    "#{ Math.round(track.audioFeatures?[k] ? 0) } BPM"
+                                                else if k is 'durationMs'
+                                                    msToTime(track.audioFeatures?[k] ? 0)
+                                                else if k is 'loudness'
+                                                    "#{ Math.round(track.audioFeatures?[k] ? 0) } dB"
+                                                else if k is 'timeSignature'
+                                                    "#{ track.audioFeatures?[k] ? 4 }/4"
+                                                else
+                                                    <meter
+                                                       min="0" max="1"
+                                                       low="33" high="66" optimum="80"
+                                                       value="#{ track.audioFeatures?[k] ? 0 }">
+                                                    </meter>
+                                                }
+                                            </td>
+                                        )}
+                                 </tr>)}
+                             </FlipMove>
+                        </InfiniteScroll>
+                    </table>
+                </div>
             else
                 <div
                     style={
@@ -337,13 +453,6 @@ class PlaylistView extends React.Component
                         justify-content-center
                         align-items-center
                         text-light">
-                    <h4
-                        style={
-                            color: colors.LIGHT_GRAY
-                        }
-                        className='text-center mb-4 w-75'>
-                        Well, you've got some high expectations!
-                    </h4>
                     <h5 className='text-center w-75'>
                         There are no songs within the values you chose
                     </h5>
@@ -392,6 +501,8 @@ class PlaylistView extends React.Component
                 <LoadingDots key={ 3 } color={ colors.YELLOW } className='mx-auto' />
             }
             <style global jsx>{"""#{} // stylus
+                body
+                    overflow-y: hidden !important
                 .dislike-button
                     margin 0
                     width 2.5rem !important
@@ -416,28 +527,40 @@ class PlaylistView extends React.Component
 
                 .track-table
                     position relative
+                    border-collapse collapse
                     ease-out 'opacity'
                     @media (min-width: #{ config.WIDTH.medium }px)
                         width 100%
 
                     thead
+                        background-color: black
+                        tr
+                            th
+                                background-color: black
+                                position sticky
+                                top 0
+                                z-index 1
                         tr
                             td, th
                                 color magenta
-                                font-size 1.3rem
+                                font-size .8rem
                                 font-style normal
                                 font-weight bold
-                                padding 20px 10px
+                                padding 10px 4px
+                                padding-right 10px
                                 text-align left
                                 vertical-align middle
-                                ease-out width
                     :global(tbody)
                         position relative !important
                         tr
-                            ease-out 0.15s background-color
+                            ease-out 0.05s background-color
                             padding-left 13px
                             padding-bottom 5px
                             padding-top 5px
+
+                            &:hover
+                                background-color: alpha(peach, 0.3) !important
+                                border-radius 6px !important
 
                             &:last-of-type
                                 td, th
@@ -449,12 +572,12 @@ class PlaylistView extends React.Component
                                 font-size 1rem
                                 font-style normal
                                 font-weight normal
-                                padding 10px 5px
+                                padding 3px 4px
                                 text-align left
                                 vertical-align middle
-                                max-width 30vw
-                                @media(max-width: $mobile)
-                                    max-width 40vw
+                                text-overflow ellipsis
+                                overflow hidden
+                                white-space nowrap
             """}</style>
         </div>
 
@@ -466,7 +589,7 @@ trackHasDislikedArtists = (track, dislikedArtists) ->
 
     return trackArtists.intersects(dislikedArtists)
 
-filterTracks = (tracks, filterExplicit, filterDislikes, dislikedArtists) ->
+filterTracks = (tracks, filterExplicit, filterDislikes, tuneableAttributes, dislikedArtists) ->
     filteredTracks = []
     if tracks?
         for t in tracks
@@ -482,12 +605,18 @@ filterTracks = (tracks, filterExplicit, filterDislikes, dislikedArtists) ->
             if filterDislikes and track.disliked
                 continue
 
+            if tuneableAttributes?.key? and track.audioFeatures?.key? and tuneableAttributes?.key isnt track.audioFeatures?.key
+                continue
+            if tuneableAttributes?.mode? and track.audioFeatures?.mode? and tuneableAttributes?.mode isnt track.audioFeatures?.mode
+                continue
+
             filteredTracks.push(track)
 
     return filteredTracks
 
 
 mapStateToProps = (state) ->
+    tuneableAttributes: state.recommendations.present.tuneableAttributes
     hasPastStates     : state.recommendations.past?.length > 0
     tuning            : state.recommendations.present.tuning
     dislikedArtists   : state.user.dislikedArtists
@@ -500,7 +629,8 @@ mapStateToProps = (state) ->
     tracks            : filterTracks(
         state.playlists.present.playlist?.tracks?.items,
         state.playlists.present.filterExplicit,
-        state.playlists.present.filterDislikes
+        state.playlists.present.filterDislikes,
+        state.recommendations.present.tuneableAttributes,
         new Set(a.id for a in state.user.dislikedArtists)
     )
     hasMore           : (

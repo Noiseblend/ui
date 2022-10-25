@@ -218,51 +218,49 @@ class MyApp extends App
         spotifyPremium = props.user?.spotifyPremium ? props.fetched?.user?.spotifyPremium
         manifest = props.manifest ? props.initial?.manifest ? defaultPageProps.manifest
 
-        <StrictMode>
-            <Container>
-                <Layout
-                    authenticated={ props.authenticated }
-                    spotifyPremium={ spotifyPremium }
-                    fillWindow>
-                    <Head>
-                        <title> { title ? 'Noiseblend' } </title>
-                        <meta name="description" content={ description } />
-                        <meta name="theme-color" content={ color } />
-                        <meta
-                            name="msapplication-TileColor"
-                            content={ color } />
-                        <meta
-                            name="msapplication-TileImage"
-                            content="
-                                #{ config.STATIC }/img/icons/\
-                                #{ icon }/#{ icon }\
-                                -apple-144x144.png\
-                                ?v=#{ config.ICON_VERSION }" />
-                        <link href={ manifest } rel='manifest' />
-                        {
-                            links = for platform, sizes of config.ICONS
-                                for size in sizes
-                                    <link
-                                        key="#{ platform }-#{ size }"
-                                        rel={if platform is 'apple'
-                                            'apple-touch-icon'
-                                        else
-                                            'icon'
-                                        }
-                                        sizes="#{ size }x#{ size }"
-                                        href="
-                                            #{ config.STATIC }/img/icons/\
-                                            #{ icon }/#{ icon }-#{ platform }-\
-                                            #{ size }x#{ size }.png\
-                                            ?v=#{ config.ICON_VERSION }" />
-                            links.reduce((acc, v) -> acc.concat(v))
-                        }
-                        <AppleLaunchScreenLinks topic={ icon } />
-                    </Head>
-                    <Component { props... } />
-                </Layout>
-            </Container>
-        </StrictMode>
+        <Container>
+            <Layout
+                authenticated={ props.authenticated }
+                spotifyPremium={ spotifyPremium }
+                fillWindow>
+                <Head>
+                    <title> { title ? 'Noiseblend' } </title>
+                    <meta name="description" content={ description } />
+                    <meta name="theme-color" content={ color } />
+                    <meta
+                        name="msapplication-TileColor"
+                        content={ color } />
+                    <meta
+                        name="msapplication-TileImage"
+                        content="
+                            #{ config.STATIC }/img/icons/\
+                            #{ icon }/#{ icon }\
+                            -apple-144x144.png\
+                            ?v=#{ config.ICON_VERSION }" />
+                    <link href={ manifest } rel='manifest' />
+                    {
+                        links = for platform, sizes of config.ICONS
+                            for size in sizes
+                                <link
+                                    key="#{ platform }-#{ size }"
+                                    rel={if platform is 'apple'
+                                        'apple-touch-icon'
+                                    else
+                                        'icon'
+                                    }
+                                    sizes="#{ size }x#{ size }"
+                                    href="
+                                        #{ config.STATIC }/img/icons/\
+                                        #{ icon }/#{ icon }-#{ platform }-\
+                                        #{ size }x#{ size }.png\
+                                        ?v=#{ config.ICON_VERSION }" />
+                        links.reduce((acc, v) -> acc.concat(v))
+                    }
+                    <AppleLaunchScreenLinks topic={ icon } />
+                </Head>
+                <Component { props... } />
+            </Layout>
+        </Container>
 
 
 

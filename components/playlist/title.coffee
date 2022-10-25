@@ -44,7 +44,7 @@ PlaylistTitle = ({
         <style jsx>{"""#{} // stylus
             .header
                 display grid
-                grid-template-columns 7vw 1fr
+                grid-template-columns 20px 1fr
                 grid-template-areas: 'hashtag name'\
                                      '. hint'
 
@@ -59,6 +59,7 @@ PlaylistTitle = ({
 
             .edit-hint
                 grid-area hint
+                margin 0
 
             .playlist-name-input
                 color white
@@ -67,9 +68,11 @@ PlaylistTitle = ({
                 border none
                 outline none
                 min-height 50px
-                width calc(100% - 5.5rem)
                 caret-color magenta
                 text-overflow ellipsis
+                width 100%
+                @media (min-width: #{ config.WIDTH.mobile }px)
+                    width calc(100% - 5.5rem)
 
             .hashtag, .playlist-name
                 color white
@@ -78,7 +81,7 @@ PlaylistTitle = ({
             @media (min-width: #{ config.WIDTH.medium }px)
                 .header
                     display grid
-                    grid-template-columns 80px 1fr
+                    grid-template-columns 40px 1fr
         """}</style>
     </div>
 

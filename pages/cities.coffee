@@ -193,7 +193,7 @@ class Cities extends React.Component
                         margin-top navbarHeightMobile + 20px
 
                 .card-heading
-                    color white
+                    color mutedRed
                     text-align center
                     margin-bottom 0
 

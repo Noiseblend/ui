@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import anime from 'animejs'
+# import anime from 'animejs'
 
 import TextButton from '~/components/textButton'
 
@@ -17,8 +17,8 @@ import { Globe, Settings, Smartphone } from '~/styles/icons'
 
 
 OPEN_ACTION_HEIGHT =
-    desktop: 55
-    mobile: 40
+    desktop: 45
+    mobile: 35
 
 OPEN_ACTION_WIDTH =
     desktop: 200
@@ -31,133 +31,117 @@ HIDDEN_WIDTH =
 
 
 class Actions extends React.PureComponent
-    showOpenActions: () ->
-        size = if @props.mobile then 'mobile' else 'desktop'
-        anime.timeline(duration: 600).add(
-            targets: '.open-links'
-            width: OPEN_ACTION_WIDTH[size]
-        ).add(
-            targets: '.open-button'
-            translateY: -OPEN_ACTION_HEIGHT[size]
-            offset: '-=500'
-            delay: (el, i) -> i * 150
-        ).add(
-            targets: '.open-button'
-            translateY: 0
-            delay: 6000
-        ).add(
-            targets: '.open-links'
-            offset: '-=400'
-            width: HIDDEN_WIDTH[size]
-            complete: () => @props.setOpenLinksVisible(false)
-        )
+    # showOpenActions: () ->
+    #     size = if @props.mobile then 'mobile' else 'desktop'
+    #     anime.timeline(duration: 600).add(
+    #         targets: '.open-links'
+    #         width: OPEN_ACTION_WIDTH[size]
+    #     ).add(
+    #         targets: '.open-button'
+    #         translateY: -OPEN_ACTION_HEIGHT[size]
+    #         offset: '-=500'
+    #         delay: (el, i) -> i * 150
+    #     ).add(
+    #         targets: '.open-button'
+    #         translateY: 0
+    #         delay: 6000
+    #     ).add(
+    #         targets: '.open-links'
+    #         offset: '-=400'
+    #         width: HIDDEN_WIDTH[size]
+    #         complete: () => @props.setOpenLinksVisible(false)
+    #     )
 
     componentDidUpdate: (prevProps, prevState, snapshot) ->
         savedPlaylist = prevProps.saving and not @props.saving
-        clickedOpen = not prevProps.openLinksVisible and @props.openLinksVisible
-        if clickedOpen
-            @showOpenActions()
-        if savedPlaylist
-            @props.setOpenLinksVisible(true)
+        # clickedOpen = not prevProps.openLinksVisible and @props.openLinksVisible
+        # if clickedOpen
+            # @showOpenActions()
+        # if savedPlaylist
+        #     @props.setOpenLinksVisible(true)
 
     render: ->
         if @props.mobile
             size = 'mobile'
-            iconSize = 24
-            fontSize = '1rem'
-            brandSize = '1.5rem'
+            iconSize = 16
+            fontSize = '.9rem'
+            brandSize = '1rem'
         else
             size = 'desktop'
-            iconSize = 30
+            iconSize = 22
             fontSize = '1.2rem'
-            brandSize = '1.6rem'
+            brandSize = '1.375rem'
         uri = @props.playlist?.uri
         spotifyUrl = @props.playlist?.externalUrls?.spotify
 
         <div
             className='d-flex justify-content-start align-items-center my-2 actions'
             style={{
+                width: 'max-content'
+                backgroundColor: colors.PITCH_BLACK.alpha(0.2)
+                borderRadius: 10
                 height: OPEN_ACTION_HEIGHT[size]
                 fontSize: fontSize
                 @props.style...
             }}>
             <div
-                style={ overflow: 'hidden' }
+                style={
+                    overflow: 'hidden'
+                    marginLeft: 14
+                }
                 className='
-                    h-100 mr-2
-                    d-flex flex-column
+                    h-100 mr-4
+                    d-flex
                     justify-content-between
                     align-items-center
                     open-action'>
-                <TextButton
-                    style={ minHeight: OPEN_ACTION_HEIGHT[size] }
-                    disabled={ not (spotifyUrl? or uri?) }
-                    color={ colors.ACTION }
-                    disabledColor={ colors.GRAY }
-                    onClick={ () => @props.setOpenLinksVisible(true) }
-                    className='
-                        d-flex h-100
-                        justify-content-between
-                        align-items-center
-                        open-button'>
-                    <FontAwesomeIcon
-                        style={ fontSize: brandSize }
-                        icon={ ['fab', 'spotify'] } />
-                    <span className='font-heading ml-2'>Open</span>
-                </TextButton>
-                <div
+                <a
                     style={
-                        width: HIDDEN_WIDTH[size]
-                        minHeight: OPEN_ACTION_HEIGHT[size]
+                        textDecoration: 'none'
                     }
-                    className='d-flex px-2 open-links'>
-                    <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    href={ spotifyUrl }>
+                    <TextButton
                         style={
-                            textDecoration: 'none'
+                            minHeight: OPEN_ACTION_HEIGHT[size]
                         }
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        href={ spotifyUrl }>
-                        <TextButton
-                            style={
-                                minHeight: OPEN_ACTION_HEIGHT[size]
-                            }
-                            disabled={ not spotifyUrl? or not @props.openLinksVisible }
-                            color={ colors.ACTION }
-                            disabledColor={ colors.GRAY }
-                            className='
-                                d-flex p-0 mr-2
-                                justify-content-between
-                                align-items-center
-                                open-button'>
-                            <Globe size={ iconSize } />
-                            <span className='font-heading ml-2'>Web</span>
-                        </TextButton>
-                    </a>
-                    <a
+                        disabled={ not spotifyUrl? }
+                        color={ colors.ACTION }
+                        disabledColor={ colors.GRAY }
+                        className='
+                            d-flex p-0 mr-2
+                            justify-content-between
+                            align-items-center
+                            open-button'>
+                        <Globe size={ iconSize } />
+                        <span className='font-heading ml-2'>Web</span>
+                    </TextButton>
+                </a>
+                <a
+                    style={
+                        textDecoration: 'none'
+                    }
+                    href={ uri }>
+                    <TextButton
                         style={
-                            textDecoration: 'none'
+                            minHeight: OPEN_ACTION_HEIGHT[size]
                         }
-                        href={ uri }>
-                        <TextButton
-                            style={
-                                minHeight: OPEN_ACTION_HEIGHT[size]
-                            }
-                            disabled={ not uri? or not @props.openLinksVisible }
-                            color={ colors.ACTION }
-                            disabledColor={ colors.GRAY }
-                            className='
-                                d-flex p-0
-                                justify-content-between
-                                align-items-center
-                                open-button'>
-                            <Smartphone size={ iconSize } />
-                            <span className='font-heading ml-2'>App</span>
-                        </TextButton>
-                    </a>
-                </div>
+                        disabled={ not uri? }
+                        color={ colors.ACTION }
+                        disabledColor={ colors.GRAY }
+                        className='
+                            d-flex p-0
+                            justify-content-between
+                            align-items-center
+                            open-button'>
+                        <Smartphone size={ iconSize } />
+                        <span className='font-heading ml-2'>App</span>
+                    </TextButton>
+                </a>
             </div>
             <TextButton
+                style={ marginRight: 14 }
                 className='
                     h-100
                     d-flex

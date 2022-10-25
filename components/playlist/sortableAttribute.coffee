@@ -9,7 +9,7 @@ import config from '~/config'
 
 Msg = ({ attr, direction }) ->
     <span>
-        Move tracks with more <b>{ attr }</b> to the <b>{ direction }</b>
+        Move tracks with higher <b>{ attr }</b> to the <b>{ direction }</b>
         <style jsx>{"""#{} // stylus
             b
                 color yellow

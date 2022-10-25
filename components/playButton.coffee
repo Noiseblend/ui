@@ -20,6 +20,7 @@ PlayButton = (props) ->
             .play-button
                 opacity 0.9
                 ease-out 'transform' 'opacity'
+                pointer-events all
 
                 &:hover,
                 &:focus

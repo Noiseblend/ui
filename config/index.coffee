@@ -14,11 +14,7 @@ LOADING_TEXTS = [
     "Filtering out elevator music"
 ]
 
-PEACH_SUNFLOWER_GRADIENT = "
-    linear-gradient(
-        135deg,
-        #{ colors.PEACH } 0%,
-        #{ colors.SUNFLOWER } 100%)"
+PEACH_SUNFLOWER_GRADIENT = "linear-gradient( 135deg, hsl(338.2, 16.4%, 86.9%) 0%, hsl(335, 4.8%, 51%) 100%)"
 BLACK_GRAY_GRADIENT = "
     linear-gradient(
         to bottom,
@@ -76,8 +72,10 @@ config =
             title: "About Us"
         "/artists":
             background: PEACH_SUNFLOWER_GRADIENT
+            navbar:
+                color: colors.MUTED_RED.s()
             brandColors:
-                color: colors.WHITE.s()
+                color: colors.MUTED_RED.s()
                 hoverColor: colors.MAUVE.s()
         "/blend":
             brandColors:
@@ -85,19 +83,25 @@ config =
                 hoverColor: colors.MAUVE.s()
         "/cities":
             background: PEACH_SUNFLOWER_GRADIENT
+            navbar:
+                color: colors.MUTED_RED.s()
             brandColors:
-                color: colors.WHITE.s()
+                color: colors.MUTED_RED.s()
                 hoverColor: colors.MAUVE.s()
         "/countries":
             background: PEACH_SUNFLOWER_GRADIENT
+            navbar:
+                color: colors.MUTED_RED.s()
             brandColors:
-                color: colors.WHITE.s()
+                color: colors.MUTED_RED.s()
                 hoverColor: colors.MAUVE.s()
         "/discover": {}
         "/genres":
             background: PEACH_SUNFLOWER_GRADIENT
+            navbar:
+                color: colors.MUTED_RED.s()
             brandColors:
-                color: colors.WHITE.s()
+                color: colors.MUTED_RED.s()
                 hoverColor: colors.MAUVE.s()
         "/logout": {}
         "/playlist":

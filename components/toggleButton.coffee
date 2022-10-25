@@ -38,7 +38,7 @@ ToggleButton = ({
                 background-color transparent
                 border 2px solid #{ color }
                 color #{ textColor }
-                border-radius 100px
+                border-radius 6px
                 cursor pointer
                 padding 1rem 3rem
 

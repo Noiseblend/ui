@@ -16,10 +16,10 @@ const defaults = {
     AUTH_TOKEN_COOKIE_KEY: 'authToken',
     AUTH_TOKEN_EXPIRATION_DAYS: 30,
     STATIC_URL: '/static',
-    LOCAL_API_URL: 'http://localhost:9000/',
-    REMOTE_API_URL: 'https://api.noiseblend.com/',
-    LOCAL_WS_URL: 'ws://localhost:9000/',
-    REMOTE_WS_URL: 'wss://api.noiseblend.com/'
+    LOCAL_API_URL: 'https://devapi.noiseblend.com/',
+    REMOTE_API_URL: 'https://devapi.noiseblend.com/',
+    LOCAL_WS_URL: 'wss://devapi.noiseblend.com',
+    REMOTE_WS_URL: 'wss://devapi.noiseblend.com'
 }
 for (let key of Object.keys(env)) {
     let val = env[key]

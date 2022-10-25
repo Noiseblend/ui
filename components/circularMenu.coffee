@@ -6,7 +6,6 @@ import anime from 'animejs'
 import _ from 'lodash'
 import Link from 'next/link'
 
-import { DonateButton } from '~/components/donateView'
 import ProfilePicture from '~/components/profilePicture'
 
 import { randomInt } from '~/lib/util'
@@ -105,11 +104,6 @@ CircularMenu = (props) ->
                             <div className='icon-text'>Log Out</div>
                         </a>
                     </Link>
-                </li>
-                <li
-                    id='donate-circle'
-                    className='flex-center'>
-                    <DonateButton size={ 50 } />
                 </li>
             </ul>
             <style jsx>{"""#{} // stylus

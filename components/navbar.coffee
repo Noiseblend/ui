@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Link from 'next/link'
 
 import Brand from '~/components/brand'
-import { DonateButton } from '~/components/donateView'
 import ProfilePicture from '~/components/profilePicture'
 
 import { classif } from '~/lib/util'
@@ -58,7 +57,6 @@ Navbar = ({
                         <span className='ml-1'>Logout</span>
                     </a>
                 </Link>
-                <DonateButton size={ config.NAVBAR_HEIGHT.desktop - 20 } />
                 <Link prefetch href='/user'>
                     <a className='ml-2 flex-center'>
                         <ProfilePicture style={ position: 'relative' } />

@@ -56,11 +56,11 @@ DiscoverItem = ({
                     topic: imageTopic
                 }
                 onClick={ onClick }
-                blur={ imageBlur }
-                fadeInDelay={ 1 }
+                blur={ 0 }
+                fadeDuration={ 100 }
                 overlayColor={ color.desaturate(0.2).alpha(0.8) }
                 clickable={ not loading }
-                fadeIn>
+                >
                 <div
                     style={
                         paddingTop: margin

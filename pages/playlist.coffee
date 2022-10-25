@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import anime from 'animejs'
 import _ from 'lodash'
 
-import ImageBackground from '~/components/imageBackground'
 import LoadingIndicator from '~/components/loadingIndicator'
 import Controls from '~/components/playlist/controls'
 import Sidebar from '~/components/playlist/sidebar'
@@ -128,6 +127,9 @@ class Playlist extends React.Component
             UserActions.setDislikes('artists', @props.fetched.dislikedArtists)
         ]
 
+        if not @props.mobile
+            @props.showSidebarIn200ms()
+
         if @props.fetched.user.firstPlaylist
             actions = [
                 actions...
@@ -247,6 +249,10 @@ class Playlist extends React.Component
                 }
                 if @props.filterDislikes and track.disliked
                     continue
+                if @props.tuneableAttributes?.key? and track.audioFeatures?.key? and @props.tuneableAttributes?.key isnt track.audioFeatures?.key
+                    continue
+                if @props.tuneableAttributes?.mode? and track.audioFeatures?.mode? and @props.tuneableAttributes?.mode isnt track.audioFeatures?.mode
+                    continue
 
                 tracks.push(track)
 
@@ -362,10 +368,8 @@ class Playlist extends React.Component
                 id='list-container'
                 style={
                     height: '80%'
-                    transition: 'width 0.3s var(--ease-out-cubic)'
-                    marginBottom: if @props.playlist? then '70px' else 0
                     width: '100vw'
-                    minHeight: '100vh'
+                    height: '100vh'
                 }>
                 { @playlistView() }
             </div>
@@ -400,6 +404,7 @@ class Playlist extends React.Component
         </div>
 
 mapStateToProps = (state) ->
+    tuneableAttributes: state.recommendations.present.tuneableAttributes
     playlist                   : state.playlists.present.playlist
     loading                    : state.playlists.present.loading
     modified                   : state.playlists.present.modified
@@ -494,6 +499,8 @@ mapDispatchToProps = (dispatch) ->
         (() -> dispatch(UIActions.setFocusHome(true))), 2000)
     defocusHomeIn8Seconds: _.debounce(
         (() -> dispatch(UIActions.setFocusHome(false))), 8000)
+    showSidebarIn200ms: _.debounce(
+        (() -> dispatch(PlaylistActions.setSidebarHidden(false))), 200)
     showSidebarIn2Seconds: _.debounce(
         (() -> dispatch(PlaylistActions.setSidebarHidden(false))), 2000)
     showHomeTooltipInHalfSecond: _.debounce(

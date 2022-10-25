@@ -17,7 +17,7 @@ MoreButton = ({
         ''
     <RoundedButton
         width={ width }
-        color={ colors.DARK_MAUVE }
+        color={ colors.BLACK }
         disabled={ disabled or noMoreData }
         loading={ loading }
         className={ className }

@@ -228,9 +228,9 @@ class Artists extends React.Component
                 </Tooltip>
                 <p className="pt-3 text-center text-dark instructions">
                     Choose&nbsp;
-                    <b className="mauve">1 to { config.CARD_LIMIT } artists</b>
+                    <b>1 to { config.CARD_LIMIT } artists</b>
                     &nbsp;and click
-                    <b className="red"> Discover</b> to get a new playlist, carefully crafted
+                    <b> Discover</b> to get a new playlist, carefully crafted
                     for your needs
                 </p>
                 { if @props.artists?.length > 0
@@ -289,7 +289,7 @@ class Artists extends React.Component
                         }>
                         <RoundedButton
                             width={ buttonWidth }
-                            color={ colors.RED }
+                            color={ colors.WHITE }
                             className="ml-1 mt-0 py-2 py-md-3"
                             onClick={ () => @setState(discovering: true) }
                             loading={ @state.discovering }
@@ -315,7 +315,7 @@ class Artists extends React.Component
                             margin-top navbarHeightMobile + 20px
 
                     .card-heading
-                        color white
+                        color mutedRed
                         text-align center
                         margin-bottom 0
 
