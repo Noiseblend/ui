@@ -18,7 +18,7 @@
         "animejs": "^3.0.1",
         "apisauce": "^1.0.2",
         "atob": "^2.1.2",
-        "axios": "0.18.1",
+        "axios": "0.21.2",
         "color": "^3.1.0",
         "create-react-class": "^15.6.3",
         "extend": "^3.0.2",
